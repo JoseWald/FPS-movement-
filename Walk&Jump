@@ -1,0 +1,102 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class Moove : MonoBehaviour
+{
+    public int Avant;
+    public int Miodina;
+    public short Saut;
+    public Rigidbody CubeRigidBody;
+    private Coroutine MyCoroutine;
+    private bool SautDetection=true;
+    // Start is called before the first frame update
+    void Start()
+    {
+        Application.targetFrameRate = 10;
+      
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Mandeha();
+   
+    }
+    void Forw()
+    {
+
+        //Debug.Log("Avant");
+        transform.Translate(Vector3.forward * Avant * Time.deltaTime);
+    }
+    void BackW()
+    {
+        //Debug.Log("ariere");
+        transform.Translate(Vector3.back * Avant * Time.deltaTime);
+    }
+    void left()
+    {
+        transform.Translate(Vector3.left*Avant*Time.deltaTime);
+    }
+    void right()
+    {
+        transform.Translate(Vector3.right*Avant*Time.deltaTime);
+    }
+    void Jump()
+    {
+        
+        if (Input.GetKeyDown(KeyCode.Space)&& SautDetection)
+        {
+            CubeRigidBody.velocity = Vector3.up * Saut * Time.deltaTime;
+            Debug.Log("SautDetection");
+            SautDetection= false;
+        StartCoroutine(MyCoroutine());
+         IEnumerator MyCoroutine()
+        {
+            yield return new WaitForSeconds(1);
+                SautDetection = true;
+                Debug.Log("Vous pouvez Maintenant Sauter");
+        }
+        }
+    }
+   
+    void Mandeha()
+    {
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            Forw();
+
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            BackW();
+        }
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            right();
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            left();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            CubeRigidBody.velocity= Vector3.up*Avant*Time.deltaTime;
+        }
+        if (Input.GetAxis("Mouse X")<0)
+        {
+            transform.Rotate(Vector3.up, -Miodina * Time.deltaTime);
+            Debug.Log("rotation detecte");
+        }
+        if (Input.GetAxis("Mouse X") >0)
+        {
+            transform.Rotate(Vector3.up, Miodina * Time.deltaTime);
+            Debug.Log("rotation detecte");
+        }
+        Jump();
+      
+    }
+   
+}
+
